@@ -1,0 +1,3 @@
+$DT = [DateTime]::Now.AddDays(-1) # check only last 24 hours
+$IPLIST = Get-EventLog -LogName 'Security' -InstanceId 4625 -After $DT | Select-Object @{n='IpAddress';e={$_.ReplacementStrings[-2]} }
+$IPGroup = $IPLIST | group-object -property IpAddress  | where {$_.Count -gt 20} | Select -property Name, count | export-csv c:\temp\export.csv
